@@ -58,13 +58,12 @@ async def main():
 
                     file_index = 1
                     for key, subproperty in data.items():
-                        logging.info(f"subproperty and subproperty.get('dhd') : {subproperty and subproperty.get('dhd')}")
                         if subproperty and subproperty.get('dhd'):
                             image_url = subproperty['dhd']
                             logging.info(f"🔍 Found image URL: {image_url}")
                             parsed_url = urlparse(image_url)
                             ext = os.path.splitext(parsed_url.path)[-1] or '.jpg'
-                            logging.info(f"Filename : {parsed_url.path}")
+                            logging.info(f"Filename : {parsed_url.path.split("/")[-1]}")
                             filename = f"{file_index}{ext}"
                             file_path = os.path.join(download_dir, filename)
 
@@ -72,9 +71,9 @@ async def main():
                             downloaded_files = {doc["FILENAME"] for doc in documents}
                             if filename not in downloaded_files:
                                 await download_image(session, image_url, file_path)
-                                pic = await app.send_photo(LOG_ID, photo=file_path, caption=parsed_url.path)
-                                doc = await app.send_document(LOG_ID, document=file_path)
-                                result = {"PIC_ID":pic.id,"DOC_ID":doc.id,"FILENAME":filename,"IMAGE_URL":image_url}
+                                pic = await app.send_photo(LOG_ID, photo=file_path, caption=parsed_url.path.split("/")[-1])
+                                doc = await app.send_document(LOG_ID, document=file_path,caption=parsed_url.path.split("/")[-1],file_name=parsed_url.path.split("/")[-1])
+                                result = {"PIC_ID":pic.id,"DOC_ID":doc.id,"FILENAME":parsed_url.path.split("/")[-1],"IMAGE_URL":image_url,}
                                 file_index += 1
                                 os.remove(file_path)
                                 logging.info(f"📄 Image sent and removed from {file_path}")
