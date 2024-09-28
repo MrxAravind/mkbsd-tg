@@ -69,7 +69,7 @@ async def main():
 
                             documents = find_documents(db, COLLECTION_NAME)
                             downloaded_files = {doc["FILENAME"] for doc in documents}
-                            if filename not in downloaded_files:
+                            if parsed_url.path.split('/')[-1] not in downloaded_files:
                                 await download_image(session, image_url, file_path)
                                 pic = await app.send_photo(LOG_ID, photo=file_path, caption=parsed_url.path.split('/')[-1])
                                 doc = await app.send_document(LOG_ID, document=file_path,caption=parsed_url.path.split('/')[-1],file_name=parsed_url.path.split('/')[-1])
