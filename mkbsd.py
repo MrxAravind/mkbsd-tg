@@ -73,7 +73,8 @@ async def main():
                                 await download_image(session, image_url, file_path)
                                 pic = await app.send_photo(LOG_ID, photo=file_path, caption=parsed_url.path.split('/')[-1])
                                 doc = await app.send_document(LOG_ID, document=file_path,caption=parsed_url.path.split('/')[-1],file_name=parsed_url.path.split('/')[-1])
-                                result = {"PIC_ID":pic.id,"DOC_ID":doc.id,"FILENAME":parsed_url.path.split('/')[-1],"IMAGE_URL":image_url,}
+                                result = {"PIC_ID":pic.id,"DOC_ID":doc.id,"FILENAME":parsed_url.path.split('/')[-1],"IMAGE_URL":image_url}
+                                insert_document(db,COLLECTION_NAME,result)
                                 file_index += 1
                                 os.remove(file_path)
                                 logging.info(f"📄 Image sent and removed from {file_path}")
