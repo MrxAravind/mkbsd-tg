@@ -1,11 +1,32 @@
-# Licensed under the WTFPL License
-
 import os
 import time
 import aiohttp
 import asyncio
+from pyrogram import Client, filters
+from config import *
+from database import *
 from urllib.parse import urlparse
 url = 'https://storage.googleapis.com/panels-api/data/20240916/media-1a-i-p~s'
+
+
+
+
+logging.basicConfig(
+    filename='MKBSD-TG.log',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
+
+
+
+# Create the Pyrogram client
+app = Client("SpidyPHVDL", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN,workers=100)
+
+
+
+
+
 
 async def delay(ms):
     await asyncio.sleep(ms / 1000)
@@ -22,8 +43,9 @@ async def download_image(session, image_url, file_path):
         print(f"Error downloading image: {str(e)}")
 
 async def main():
-    try:
-        async with aiohttp.ClientSession() as session:
+    async with app:
+       try:
+         async with aiohttp.ClientSession() as session:
             async with session.get(url) as response:
                 if response.status != 200:
                     raise Exception(f"⛔ Failed to fetch JSON file: {response.status}")
@@ -49,13 +71,14 @@ async def main():
                         file_path = os.path.join(download_dir, filename)
 
                         await download_image(session, image_url, file_path)
-                        print(f"🖼️ Saved image to {file_path}")
-
+                        print(f"🖼️ Downloaded image to {file_path}")
+                        pic = await app.send_photo(Chat_ID,photo=file_path)
+                        doc = await app.send_document(Chat_ID,document=file_path)
                         file_index += 1
                         await delay(250)
 
-    except Exception as e:
-        print(f"Error: {str(e)}")
+       except Exception as e:
+            print(f"Error: {str(e)}")
 
 def ascii_art():
     print("""
@@ -73,4 +96,4 @@ def ascii_art():
 if __name__ == "__main__":
     ascii_art()
     time.sleep(5)
-    asyncio.run(main())
+    app.run(main())
