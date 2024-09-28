@@ -66,7 +66,7 @@ async def main():
                             filename = f"{file_index}{ext}"
                             file_path = os.path.join(download_dir, filename)
 
-                            documents = find_documents(db, collection_name)
+                            documents = find_documents(db, COLLECTION_NAME)
                             downloaded_files = {doc["FILENAME"] for doc in documents}
                             if filename not in downloaded_files:
                                 await download_image(session, image_url, file_path)
