@@ -4,4 +4,4 @@ speedtest-cli
 flask
 bs4
 python-dotenv
-supabase
+aiohttp
