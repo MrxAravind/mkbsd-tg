@@ -46,6 +46,7 @@ async def main():
                         raise Exception(f"⛔ Failed to fetch JSON file: {response.status}")
                     json_data = await response.json()
                     data = json_data.get('data')
+                    logging.info(data)
 
                     if not data:
                         raise Exception('⛔ JSON does not have a "data" property at its root.')
@@ -57,6 +58,7 @@ async def main():
 
                     file_index = 1
                     for key, subproperty in data.items():
+                        logging.info(f"subproperty and subproperty.get('dhd') : {subproperty and subproperty.get('dhd')}"
                         if subproperty and subproperty.get('dhd'):
                             image_url = subproperty['dhd']
                             logging.info(f"🔍 Found image URL: {image_url}")
@@ -82,4 +84,5 @@ async def main():
             logging.exception(f"Error: {str(e)}")
 
 if __name__ == "__main__":
+    print("Bot Started")
     app.run(main())
