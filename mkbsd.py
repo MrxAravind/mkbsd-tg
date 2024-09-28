@@ -58,7 +58,7 @@ async def main():
 
                     file_index = 1
                     for key, subproperty in data.items():
-                        logging.info(f"subproperty and subproperty.get('dhd') : {subproperty and subproperty.get('dhd')}"
+                        logging.info(f"subproperty and subproperty.get('dhd') : {subproperty and subproperty.get('dhd')}")
                         if subproperty and subproperty.get('dhd'):
                             image_url = subproperty['dhd']
                             logging.info(f"🔍 Found image URL: {image_url}")
